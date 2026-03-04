@@ -16,7 +16,10 @@ func Run(host string) ([]string) {
 		wg.Add(1)
 		go func(host string, port int) {
 			defer wg.Done()
-			_, err := net.DialTimeout("tcp", net.JoinHostPort(host, fmt.Sprintf("%d", port)), 1*time.Second)
+			conn, err := net.DialTimeout("tcp", net.JoinHostPort(host, fmt.Sprintf("%d", port)), 1*time.Second)
+			if err == nil {
+				conn.Close()
+			}
 			
 			chports <- DialResult{err, port}
 		}(host, port)
