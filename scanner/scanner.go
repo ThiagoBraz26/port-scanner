@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net"
 	"sync"
+	"time"
 )
 
 func Run(host string) ([]string) {
@@ -15,7 +16,7 @@ func Run(host string) ([]string) {
 		wg.Add(1)
 		go func(host string, port int) {
 			defer wg.Done()
-			_, err := net.Dial("tcp", net.JoinHostPort(host, fmt.Sprintf("%d", port)))
+			_, err := net.DialTimeout("tcp", net.JoinHostPort(host, fmt.Sprintf("%d", port)), 1*time.Second)
 			
 			chports <- DialResult{err, port}
 		}(host, port)
