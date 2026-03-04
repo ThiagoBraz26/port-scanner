@@ -3,21 +3,32 @@ package scanner
 import (
 	"fmt"
 	"net"
+	"sync"
 )
 
 func Run(host string) ([]string) {
+	var wg sync.WaitGroup
+	chports := make(chan DialResult, 65535)
 	var ports []string
 
-	for i := 0; i <= 65536; i++ {
-		conn, err := net.Dial("tcp", net.JoinHostPort(host, fmt.Sprintf("%d", i)))
-		if err != nil {
-			ports = append(ports, fmt.Sprintf("Porta: %-6d FECHADA", i))
-			continue
-		}
-
-		ports = append(ports, fmt.Sprintf("Porta: %-6d ABERTA", i))
-		conn.Close()
+	for port := 0; port <= 65354; port++ {
+		wg.Add(1)
+		go func(host string, port int) {
+			defer wg.Done()
+			conn, err := net.Dial("tcp", net.JoinHostPort(host, fmt.Sprintf("%d", port)))
+			
+			chports <- DialResult{conn, err, port}
+		}(host, port)
 	}
-	
+	wg.Wait()
+
+	close(chports)
+
+	for result := range chports {
+		if(result.Err == nil) {
+			ports = append(ports, fmt.Sprintf("Porta: %-6d ABERTA", result.Port))
+		}
+	}
+
 	return ports
 }
