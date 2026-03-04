@@ -11,6 +11,7 @@ import (
 func main() {
 	start := time.Now()
 	host := flag.String("host", "localhost", "Host alvo")
+	flag.Parse()
 	
 	ports := scanner.Run(*host)
 	
