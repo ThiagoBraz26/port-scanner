@@ -12,11 +12,11 @@ func main() {
 	start := time.Now()
 	host := flag.String("host", "localhost", "Host alvo")
 	flag.Parse()
-	
-	ports := scanner.Run(*host)
-	
-	for _, port := range ports {
-		fmt.Println(port)
+
+	results := scanner.Run(*host)
+
+	for _, result := range results {
+		fmt.Println(result)
 	}
 
 	fmt.Printf("\n\n Tempo decorrido: %s", time.Since(start))
