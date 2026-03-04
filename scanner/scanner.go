@@ -15,9 +15,9 @@ func Run(host string) ([]string) {
 		wg.Add(1)
 		go func(host string, port int) {
 			defer wg.Done()
-			conn, err := net.Dial("tcp", net.JoinHostPort(host, fmt.Sprintf("%d", port)))
+			_, err := net.Dial("tcp", net.JoinHostPort(host, fmt.Sprintf("%d", port)))
 			
-			chports <- DialResult{conn, err, port}
+			chports <- DialResult{err, port}
 		}(host, port)
 	}
 	wg.Wait()
