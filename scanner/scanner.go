@@ -7,10 +7,10 @@ import (
 	"time"
 )
 
-func Run(host string) ([]string) {
+func Run(host string) ([]int) {
 	var wg sync.WaitGroup
 	chports := make(chan DialResult, 65535)
-	var ports []string
+	var ports []int
 
 	for port := 0; port <= 65354; port++ {
 		wg.Add(1)
@@ -30,7 +30,7 @@ func Run(host string) ([]string) {
 
 	for result := range chports {
 		if(result.Err == nil) {
-			ports = append(ports, fmt.Sprintf("Porta: %-6d ABERTA", result.Port))
+			ports = append(ports, result.Port)
 		}
 	}
 

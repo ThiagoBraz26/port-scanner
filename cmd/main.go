@@ -16,7 +16,7 @@ func main() {
 	results := scanner.Run(*host)
 
 	for _, result := range results {
-		fmt.Println(result)
+		fmt.Printf("Porta %-6d aberta\n", result)
 	}
 
 	fmt.Printf("\n\n Tempo decorrido: %s", time.Since(start))
