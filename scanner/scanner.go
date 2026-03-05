@@ -12,7 +12,7 @@ func Run(host string) ([]int) {
 	chports := make(chan DialResult, 65535)
 	var ports []int
 
-	for port := 0; port <= 65354; port++ {
+	for port := 0; port <= 65535; port++ {
 		wg.Add(1)
 		go func(host string, port int) {
 			defer wg.Done()
