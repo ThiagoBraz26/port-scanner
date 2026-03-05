@@ -9,7 +9,7 @@ import (
 
 func Run(host string) ([]int) {
 	var wg sync.WaitGroup
-	chports := make(chan DialResult, 65535)
+	chports := make(chan DialResult, 65536)
 	var ports []int
 
 	for port := 0; port <= 65535; port++ {
