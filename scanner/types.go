@@ -1,6 +1,6 @@
 package scanner
 
 type DialResult struct {
-	Err error
+	Err  error
 	Port int
 }

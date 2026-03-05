@@ -4,31 +4,31 @@ import (
 	"sync"
 )
 
-func Run(host string, workers int) ([]int) {
+func Run(host string, workers int) []int {
 	var wg sync.WaitGroup
-	chports := make(chan DialResult, 65536)
-	chjobs := make(chan int, 65536)
-	var ports []int
+	ports := make(chan DialResult, 65536)
+	jobs := make(chan int, 65536)
+	var results []int
 
-	for i := 0; i < 65536; i++ {
-		chjobs <- i
+	for i := range 65536 {
+		jobs <- i
 	}
-	close(chjobs)
+	close(jobs)
 
-	for i := 0; i < workers; i++ {
+	for range workers {
 		wg.Add(1)
-		go worker(host, chjobs, chports, &wg)
+		go worker(host, jobs, ports, &wg)
 	}
 
 	wg.Wait()
 
-	close(chports)
+	close(ports)
 
-	for result := range chports {
-		if(result.Err == nil) {
-			ports = append(ports, result.Port)
+	for result := range ports {
+		if result.Err == nil {
+			results = append(results, result.Port)
 		}
 	}
 
-	return ports
+	return results
 }

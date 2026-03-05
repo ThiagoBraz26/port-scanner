@@ -4,12 +4,13 @@ import (
 	"flag"
 	"fmt"
 	"time"
-	
+
 	"port-scanner/scanner"
 )
 
 func main() {
 	start := time.Now()
+
 	host := flag.String("host", "localhost", "Target host")
 	workers := flag.Int("workers", 500, "Numbers of workers")
 	flag.Parse()
