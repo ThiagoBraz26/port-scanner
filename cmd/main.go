@@ -10,8 +10,8 @@ import (
 
 func main() {
 	start := time.Now()
-	host := flag.String("host", "localhost", "Host alvo")
-	workers := flag.Int("workers", 100, "Numbers of workers")
+	host := flag.String("host", "localhost", "Target host")
+	workers := flag.Int("workers", 500, "Numbers of workers")
 	flag.Parse()
 
 	results := scanner.Run(*host, *workers)
