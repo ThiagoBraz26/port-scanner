@@ -1,10 +1,7 @@
 package scanner
 
 import (
-	"fmt"
-	"net"
 	"sync"
-	"time"
 )
 
 func Run(host string, workers int) ([]int) {
@@ -20,16 +17,7 @@ func Run(host string, workers int) ([]int) {
 
 	for i := 0; i < workers; i++ {
 		wg.Add(1)
-		go func(host string, ports chan int) {
-			for port := range ports {
-				conn, err := net.DialTimeout("tcp", net.JoinHostPort(host, fmt.Sprintf("%d", port)), 1*time.Second)
-				if err == nil {
-					conn.Close()
-				}
-				chports <- DialResult{err, port}
-			}
-			wg.Done()
-		}(host, chjobs)
+		go worker(host, chjobs, chports, &wg)
 	}
 
 	wg.Wait()
