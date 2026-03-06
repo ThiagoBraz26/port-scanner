@@ -2,9 +2,10 @@ package scanner
 
 import (
 	"sync"
+	"time"
 )
 
-func Run(host string, workers int) []int {
+func Run(host string, workers int, timeout time.Duration) []int {
 	var wg sync.WaitGroup
 	ports := make(chan DialResult, 65536)
 	jobs := make(chan int, 65536)
@@ -17,7 +18,7 @@ func Run(host string, workers int) []int {
 
 	for range workers {
 		wg.Add(1)
-		go worker(host, jobs, ports, &wg)
+		go worker(host, jobs, ports, timeout, &wg)
 	}
 
 	wg.Wait()
